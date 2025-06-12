@@ -54,7 +54,7 @@ if ($mform->is_cancelled()) {
     $apikey = get_config('local_aireport', 'openrouter_apikey');
     if (empty($apikey)) {
         // For testing purposes, use the provided API key
-        $apikey = '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';
+        $apikey = '';
         // Uncomment this line when going to production
         // $error = get_string('error_apikey', 'local_aireport');
     }
