@@ -26,8 +26,11 @@
 $string['pluginname'] = 'AI Report';
 $string['openrouter_apikey'] = 'OpenRouter API Key';
 $string['openrouter_apikey_desc'] = 'Enter your OpenRouter API key to enable AI-powered SQL generation.';
-$string['promptlabel'] = 'Describe the report you want (in English or Turkish)';
-$string['submitprompt'] = 'Generate SQL';
+$string['promptlabel'] = 'Enter your report request (in natural language)';
+$string['submitprompt'] = 'Generate Report';
+$string['choosehistory'] = 'Choose a previous report';
+$string['choosehistory_help'] = 'You can select a previously generated report to quickly rerun its SQL query. If you select a report here, the prompt field will be ignored.';
+$string['gobtn'] = 'Go';
 $string['resultlabel'] = 'Generated SQL:';
 $string['queryresults'] = 'Query Results';
 $string['norecords'] = 'No records found for this query';

@@ -38,10 +38,21 @@ class prompt_form extends \moodleform {
     public function definition() {
         $mform = $this->_form;
         
+        // Dropdown for previous prompts (optional)
+        if (!empty($this->_customdata['historyoptions'])) {
+            $group = array();
+            $group[] = $mform->createElement('select', 'historyprompt', '', $this->_customdata['historyoptions'], array('id' => 'historyprompt'));
+            $group[] = $mform->createElement('submit', 'historygo', get_string('gobtn', 'local_aireport'));
+            $mform->addGroup($group, 'historygroup', get_string('choosehistory', 'local_aireport'), ' ', false);
+            $mform->addHelpButton('historygroup', 'choosehistory', 'local_aireport');
+            $mform->setDefault('historyprompt', '');
+        }
+
         $mform->addElement('textarea', 'prompt', get_string('promptlabel', 'local_aireport'), 
                            ['rows' => 5, 'cols' => 60]);
         $mform->setType('prompt', PARAM_TEXT);
-        $mform->addRule('prompt', null, 'required', null, 'client');
+        // prompt artık zorunlu değil, ya prompt ya da historyprompt seçilmeli
+        // $mform->addRule('prompt', null, 'required', null, 'client');
         
         $this->add_action_buttons(false, get_string('submitprompt', 'local_aireport'));
     }

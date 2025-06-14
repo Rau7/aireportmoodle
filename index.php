@@ -42,7 +42,14 @@ require_once($CFG->dirroot.'/local/aireport/classes/form/prompt_form.php');
 require_once($CFG->libdir.'/tablelib.php');
 
 // Initialize variables.
-$mform = new local_aireport\form\prompt_form();
+// Geçmiş promptları çek
+$historyoptions = array('' => get_string('choosehistory', 'local_aireport'));
+$historyprompts = $DB->get_records('local_aireport_history', array('userid' => $USER->id), 'timecreated DESC');
+foreach ($historyprompts as $h) {
+    $shortprompt = mb_strimwidth($h->prompt, 0, 60, '...');
+    $historyoptions[$h->id] = $shortprompt . ' [' . userdate($h->timecreated, '%d %b %Y %H:%M') . ']';
+}
+$mform = new local_aireport\form\prompt_form(null, array('historyoptions' => $historyoptions));
 $sqlresult = '';
 $error = '';
 
@@ -50,8 +57,22 @@ $error = '';
 if ($mform->is_cancelled()) {
     redirect(new moodle_url('/admin/search.php'));
 } else if ($data = $mform->get_data()) {
-    // Get API key from config or use default for testing
-    $apikey = get_config('local_aireport', 'openrouter_apikey');
+    global $DB, $USER;
+    $historygo = isset($_POST['historygo']);
+    $historyprompt = $_POST['historyprompt'] ?? '';
+    $submitprompt = $_POST['submitbutton'] ?? '';
+    // Go butonuna basıldıysa:
+    if ($historygo && !empty($historyprompt)) {
+        $historyid = $historyprompt;
+        $historyrec = $DB->get_record('local_aireport_history', array('id' => $historyid, 'userid' => $USER->id));
+        if ($historyrec && !empty($historyrec->sqlquery)) {
+            $sqlresult = $historyrec->sqlquery;
+        } else {
+            $error = 'Selected history prompt not found.';
+        }
+    } else if (!empty($submitprompt) && !empty($data->prompt)) {
+        // Get API key from config or use default for testing
+        $apikey = get_config('local_aireport', 'openrouter_apikey');
     if (empty($apikey)) {
         // For testing purposes, use the provided API key
         $apikey = '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';
@@ -120,13 +141,19 @@ if ($mform->is_cancelled()) {
                 }
                 
                 // Extract just the SQL part
-                $content = substr($content, $selectPos, $endPos - $selectPos);
+                $sqlresult = trim(substr($content, $selectPos, $endPos - $selectPos));
+            } else {
+                $sqlresult = trim($content);
             }
-            
-            // Trim any extra whitespace
-            $content = trim($content);
-            
-            $sqlresult = s($content);
+
+            // Başarılı prompt+sql'i history tablosuna kaydet
+            $record = new stdClass();
+            $record->userid = $USER->id;
+            $record->prompt = $prompt;
+            $record->sqlquery = $sqlresult;
+            $record->timecreated = time();
+            $record->timemodified = time();
+            $DB->insert_record('local_aireport_history', $record);
         } else {
             $error = get_string('error_openrouter', 'local_aireport');
             if (isset($json->error)) {
@@ -134,14 +161,21 @@ if ($mform->is_cancelled()) {
             }
         }
     }
+
+    }
 }
 
 // Output page.
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('pluginname', 'local_aireport'));
-
-// Display form.
+// Select2 CDN ekle
+// (jQuery zaten DataTables için eklenmişti)
+echo '<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />';
+echo '<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>';
 $mform->display();
+// Select2 başlatıcı kod
+// (Sayfa sonunda çalışacak şekilde)
+echo '<script>$(function() { if (typeof $ !== "undefined" && $("#historyprompt").length) { $("#historyprompt").select2({width: "resolve"}); } });</script>';
 
 // Display results or error.
 if (!empty($sqlresult)) {
