@@ -54,7 +54,7 @@ if ($mform->is_cancelled()) {
     $apikey = get_config('local_aireport', 'openrouter_apikey');
     if (empty($apikey)) {
         // For testing purposes, use the provided API key
-        $apikey = '';
+        $apikey = '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';
         // Uncomment this line when going to production
         // $error = get_string('error_apikey', 'local_aireport');
     }
@@ -160,7 +160,7 @@ if (!empty($sqlresult)) {
             $records = $DB->get_records_sql($sql, array());
             
             if (count($records) > 0) {
-                echo html_writer::tag('h3', get_string('queryresults', 'local_aireport') . ' (' . count($records) . ' records)');
+                echo html_writer::tag('h3', 'Query Results' . ' (' . count($records) . ' records)');
                 
                 // Start table
                 $table = new html_table();
@@ -175,7 +175,23 @@ if (!empty($sqlresult)) {
                     $table->data[] = array_values((array)$record);
                 }
                 
+                // Add DataTables id
+                $table->id = 'aireport-table';
                 echo html_writer::table($table);
+                
+                // DataTables ve Buttons CDN ile export özellikleri
+                echo '<link rel="stylesheet" href="https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.min.css">';
+                echo '<link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.0.1/css/buttons.dataTables.min.css">';
+                echo '<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>';
+                echo '<script src="https://cdn.datatables.net/2.3.2/js/dataTables.min.js"></script>';
+                echo '<script src="https://cdn.datatables.net/buttons/3.0.1/js/dataTables.buttons.min.js"></script>';
+                echo '<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>';
+                echo '<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>';
+                echo '<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>';
+                echo '<script src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.html5.min.js"></script>';
+                echo '<script src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.print.min.js"></script>';
+                echo '<script>$(document).ready(function() { $("#aireport-table").DataTable({ dom: "Bfrtip", buttons: ["copy", "csv", "excel", "pdf", "print"] }); });</script>';
+
             } else {
                 echo $OUTPUT->notification(get_string('norecords', 'local_aireport'), 'info');
             }
