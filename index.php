@@ -146,14 +146,7 @@ if ($mform->is_cancelled()) {
                 $sqlresult = trim($content);
             }
 
-            // Başarılı prompt+sql'i history tablosuna kaydet
-            $record = new stdClass();
-            $record->userid = $USER->id;
-            $record->prompt = $prompt;
-            $record->sqlquery = $sqlresult;
-            $record->timecreated = time();
-            $record->timemodified = time();
-            $DB->insert_record('local_aireport_history', $record);
+            // Otomatik kayıt yok! Sadece ekrana yazdır.
         } else {
             $error = get_string('error_openrouter', 'local_aireport');
             if (isset($json->error)) {
@@ -163,6 +156,19 @@ if ($mform->is_cancelled()) {
     }
 
     }
+}
+
+// Promptu Kaydet ile geldiyse sadece burada kaydet
+if (isset($_POST['saveprompt']) && !empty($_POST['prompt']) && !empty($_POST['sqlresult'])) {
+    global $DB, $USER;
+    $record = new stdClass();
+    $record->userid = $USER->id;
+    $record->prompt = $_POST['prompt'];
+    $record->sqlquery = $_POST['sqlresult'];
+    $record->timecreated = time();
+    $record->timemodified = time();
+    $DB->insert_record('local_aireport_history', $record);
+    $error = get_string('prompt_saved', 'local_aireport');
 }
 
 // Output page.
@@ -181,7 +187,23 @@ echo '<script>$(function() { if (typeof $ !== "undefined" && $("#historyprompt")
 if (!empty($sqlresult)) {
     echo html_writer::tag('h3', get_string('resultlabel', 'local_aireport'));
     echo html_writer::tag('pre', $sqlresult, ['class' => 'border p-3 bg-light']);
-    
+    // Promptu Kaydet butonu (tablo/sonuç altına)
+    if (!empty($sqlresult) && empty($_POST['saveprompt'])) {
+        // Promptu bul: yeni prompt, post, veya historyden
+        $promptval = '';
+        if (!empty($data->prompt)) {
+            $promptval = $data->prompt;
+        } else if (!empty($_POST['prompt'])) {
+            $promptval = $_POST['prompt'];
+        } else if (!empty($historyrec->prompt)) {
+            $promptval = $historyrec->prompt;
+        }
+        echo '<form method="post" style="margin-top:20px;">';
+        echo '<input type="hidden" name="prompt" value="'.s($promptval).'">';
+        echo '<input type="hidden" name="sqlresult" value="'.s($sqlresult).'">';
+        echo '<button type="submit" name="saveprompt" class="btn btn-primary">'.get_string('savepromptbtn', 'local_aireport').'</button>';
+        echo '</form>';
+    }
     // Execute the SQL query and show results
     try {
         global $DB;
@@ -194,7 +216,7 @@ if (!empty($sqlresult)) {
             $records = $DB->get_records_sql($sql, array());
             
             if (count($records) > 0) {
-                echo html_writer::tag('h3', 'Query Results' . ' (' . count($records) . ' records)');
+                echo html_writer::tag('h3', get_string('queryresults', 'local_aireport') . ' (' . count($records) . ' records)');
                 
                 // Start table
                 $table = new html_table();

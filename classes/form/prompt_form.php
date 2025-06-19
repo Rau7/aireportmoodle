@@ -42,7 +42,7 @@ class prompt_form extends \moodleform {
         if (!empty($this->_customdata['historyoptions'])) {
             $group = array();
             $group[] = $mform->createElement('select', 'historyprompt', '', $this->_customdata['historyoptions'], array('id' => 'historyprompt'));
-            $group[] = $mform->createElement('submit', 'historygo', get_string('gobtn', 'local_aireport'));
+            $group[] = $mform->createElement('submit', 'historygo', get_string('makefromlistbtn', 'local_aireport'));
             $mform->addGroup($group, 'historygroup', get_string('choosehistory', 'local_aireport'), ' ', false);
             $mform->addHelpButton('historygroup', 'choosehistory', 'local_aireport');
             $mform->setDefault('historyprompt', '');
