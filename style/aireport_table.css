@@ -186,3 +186,20 @@ table.dataTable {
 .dt-buttons {
   text-align: right !important;
 }
+
+.dt-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0;
+  margin-top: 2rem;
+}
+
+.dt-search {
+  text-align: right !important;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.updtbtn {
+  margin-top: -2px;
+}
