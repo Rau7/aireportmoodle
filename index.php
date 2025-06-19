@@ -275,8 +275,16 @@ if (!empty($sqlresult)) {
         echo '<form method="post" style="margin-top:20px;">';
         echo '<input type="hidden" name="prompt" value="'.s($promptval).'">';
         echo '<input type="hidden" name="sqlresult" value="'.s($sqlresult).'">';
-        echo '<input type="text" name="promptname" placeholder="'.get_string('promptname', 'local_aireport').'" required style="margin-right:10px;">';
-        echo '<button type="submit" name="saveprompt" class="btn btn-primary">'.get_string('savepromptbtn', 'local_aireport').'</button>';
+        echo '<div class="mb-3 row fitem" data-fieldtype="text">';
+        echo '  <div class="col-md-3 col-form-label d-flex pb-0 pe-md-0">';
+        echo '    <label for="promptname" class="mb-0 word-break" style="cursor: default;">'.get_string('promptname', 'local_aireport').'</label>';
+        echo '  </div>';
+        echo '  <div class="col-md-9 d-flex flex-wrap align-items-start felement">';
+        echo '    <input type="text" id="promptname" name="promptname" value="'.s($nameval).'" placeholder="'.get_string('promptname', 'local_aireport').'" required class="form-control" style="max-width:340px;margin-right:10px;">';
+        echo '    <div class="form-control-feedback invalid-feedback" id="id_error_promptname"></div>';
+        echo '<button type="submit" name="saveprompt" class="btn btn-success updtbtn">'.get_string('savepromptbtn', 'local_aireport').'</button>';
+        echo '  </div>';
+        echo '</div>';
         echo '</form>';
     }
     // Execute the SQL query and show results
