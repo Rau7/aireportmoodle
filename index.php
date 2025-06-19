@@ -46,8 +46,12 @@ require_once($CFG->libdir.'/tablelib.php');
 $historyoptions = array('' => get_string('choosehistory', 'local_aireport'));
 $historyprompts = $DB->get_records('local_aireport_history', array('userid' => $USER->id), 'timecreated DESC');
 foreach ($historyprompts as $h) {
-    $shortprompt = mb_strimwidth($h->prompt, 0, 60, '...');
-    $historyoptions[$h->id] = $shortprompt . ' [' . userdate($h->timecreated, '%d %b %Y %H:%M') . ']';
+    if (!empty($h->name)) {
+        $label = $h->name;
+    } else {
+        $label = mb_strimwidth($h->prompt, 0, 60, '...');
+    }
+    $historyoptions[$h->id] = $label . ' [' . userdate($h->timecreated, '%d %b %Y %H:%M') . ']';
 }
 $mform = new local_aireport\form\prompt_form(null, array('historyoptions' => $historyoptions));
 $sqlresult = '';
@@ -161,19 +165,32 @@ if ($mform->is_cancelled()) {
 // Promptu Kaydet ile geldiyse sadece burada kaydet
 if (isset($_POST['saveprompt']) && !empty($_POST['prompt']) && !empty($_POST['sqlresult'])) {
     global $DB, $USER;
-    $record = new stdClass();
-    $record->userid = $USER->id;
-    $record->prompt = $_POST['prompt'];
-    $record->sqlquery = $_POST['sqlresult'];
-    $record->timecreated = time();
-    $record->timemodified = time();
-    $DB->insert_record('local_aireport_history', $record);
-    $error = get_string('prompt_saved', 'local_aireport');
+    $promptname = trim($_POST['promptname'] ?? '');
+    if ($promptname === '') {
+        $error = get_string('promptname_empty', 'local_aireport');
+    } else {
+        $record = new stdClass();
+        $record->userid = $USER->id;
+        $record->name = $promptname;
+        $record->prompt = $_POST['prompt'];
+        $record->sqlquery = $_POST['sqlresult'];
+        $record->timecreated = time();
+        $record->timemodified = time();
+        $DB->insert_record('local_aireport_history', $record);
+        $success = get_string('prompt_saved', 'local_aireport');
+    }
 }
 
 // Output page.
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('pluginname', 'local_aireport'));
+
+if (!empty($success)) {
+    echo '<div class="alert alert-success">'.s($success).'</div>';
+}
+if (!empty($error)) {
+    echo '<div class="alert alert-danger">'.s($error).'</div>';
+}
 // Select2 CDN ekle
 // (jQuery zaten DataTables için eklenmişti)
 echo '<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />';
@@ -201,6 +218,7 @@ if (!empty($sqlresult)) {
         echo '<form method="post" style="margin-top:20px;">';
         echo '<input type="hidden" name="prompt" value="'.s($promptval).'">';
         echo '<input type="hidden" name="sqlresult" value="'.s($sqlresult).'">';
+        echo '<input type="text" name="promptname" placeholder="'.get_string('promptname', 'local_aireport').'" required style="margin-right:10px;">';
         echo '<button type="submit" name="saveprompt" class="btn btn-primary">'.get_string('savepromptbtn', 'local_aireport').'</button>';
         echo '</form>';
     }

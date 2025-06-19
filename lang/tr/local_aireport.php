@@ -17,5 +17,9 @@ $string['sqlerror'] = 'SQL Hatası:';
 $string['error_openrouter'] = 'OpenRouter API hatası:';
 $string['error_apikey'] = 'API anahtarı eksik veya hatalı.';
 $string['prompt_saved'] = 'Prompt ve sorgu başarıyla kaydedildi!';
+$string['promptname'] = 'Prompt İsmi';
+$string['promptname_empty'] = 'Prompt ismi boş olamaz!';
+$string['promptname_help'] = 'Kaydedilen promptun kısa ve anlamlı bir ismi.';
 $string['makefromlistbtn'] = 'Listeden Yap';
 $string['savepromptbtn'] = 'Bu Promptu Kaydet';
+
