@@ -1,0 +1,188 @@
+/* Modern AI Report Table Styles */
+.aireport-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 16px #0001;
+  padding: 28px 28px 18px 28px;
+  margin-bottom: 32px;
+}
+.aireport-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+.aireport-card-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+.aireport-table-actions button {
+  background: #f3f4fa;
+  color: #222;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  margin-right: 6px;
+  font-size: 0.95rem;
+  padding: 5px 15px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.aireport-table-actions button:hover {
+  background: #e3e6ff;
+}
+.aireport-searchbox {
+  width: 100%;
+  margin-bottom: 18px;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+.aireport-table-wrap {
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
+.aireport-table {
+  min-width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 1rem;
+  background: #fff;
+}
+.aireport-table th,
+.aireport-table td {
+  padding: 14px 14px;
+  text-align: left;
+}
+.aireport-table th {
+  background: #f4f5f7;
+  font-weight: 700;
+  font-size: 1rem;
+  border-bottom: 2px solid #e0e0e0;
+}
+.aireport-table td {
+  border-bottom: 1px solid #f0f0f0;
+}
+.aireport-table tr:last-child td {
+  border-bottom: none;
+}
+.aireport-table tr:hover td {
+  background: #f8fafc;
+}
+
+/* === DataTables Modern Kart/Kutu ve Sade Stil Override === */
+.dataTables_wrapper {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px #0002;
+  padding: 24px 24px 18px 24px;
+  margin-bottom: 24px;
+}
+.dataTables_wrapper .aireport-card-header,
+.dataTables_wrapper .dt-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  gap: 12px;
+}
+.dataTables_wrapper .aireport-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0;
+}
+.dataTables_wrapper .aireport-card-title span {
+  font-size: 0.95rem;
+  color: #888;
+  margin-left: 6px;
+}
+/* DataTables arama kutusu */
+.dataTables_filter label {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin-bottom: 12px;
+}
+.dataTables_filter input {
+  width: 100% !important;
+  padding: 8px 12px !important;
+  border: 1px solid #ddd !important;
+  border-radius: 8px !important;
+  font-size: 1rem !important;
+}
+/* DataTables butonları */
+.dt-buttons .dt-button,
+.dt-buttons .buttons-csv,
+.dt-buttons .buttons-excel,
+.dt-buttons .buttons-pdf,
+.dt-buttons .buttons-print,
+.dt-buttons .buttons-copy {
+  background: #f3f4fa !important;
+  color: #222 !important;
+  border: 1px solid #e0e0e0 !important;
+  border-radius: 6px !important;
+  margin-right: 6px !important;
+  font-size: 0.95rem !important;
+  padding: 5px 15px !important;
+  box-shadow: none !important;
+  transition: background 0.2s !important;
+}
+.dt-buttons .dt-button:hover {
+  background: #e3e6ff !important;
+  color: #222 !important;
+}
+/* Tablo görünümü */
+.dataTable {
+  min-width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+  font-size: 1rem;
+}
+.dataTable thead th {
+  background: #f4f5f7;
+  font-weight: 700;
+  font-size: 1rem;
+  text-align: left;
+  border-bottom: 2px solid #e0e0e0;
+  padding: 10px 8px;
+}
+.dataTable tbody td {
+  font-size: 1rem;
+  padding: 9px 8px;
+  border-bottom: 1px solid #f0f0f0;
+}
+.dataTable tbody tr:last-child td {
+  border-bottom: none;
+}
+.dataTable tbody tr:hover td {
+  background: #f8fafc;
+}
+/* Responsive kutu kenarlığı */
+table.dataTable {
+  border: 1px solid #eee;
+}
+/* Kayıt sayısı ve sayfalama */
+.dataTables_info,
+.dataTables_paginate {
+  font-size: 0.95rem;
+  color: #888;
+}
+.dataTables_paginate .paginate_button.current {
+  background: #e3e6ff;
+  color: #222 !important;
+  border-radius: 5px;
+}
+
+.dt-buttons {
+  text-align: right !important;
+}

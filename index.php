@@ -283,6 +283,8 @@ if (!empty($sqlresult)) {
             $records = $DB->get_records_sql($sql, array());
             
             if (count($records) > 0) {
+                // Modern DataTables görünümü için özel CSS
+                
                 echo html_writer::tag('h3', get_string('queryresults', 'local_aireport') . ' (' . count($records) . ' records)');
                 
                 // Start table
@@ -305,6 +307,7 @@ if (!empty($sqlresult)) {
                 // DataTables ve Buttons CDN ile export özellikleri
                 echo '<link rel="stylesheet" href="https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.min.css">';
                 echo '<link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.0.1/css/buttons.dataTables.min.css">';
+                echo '<link rel="stylesheet" href="/local/aireport/style/aireport_table.css">';
                 echo '<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>';
                 echo '<script src="https://cdn.datatables.net/2.3.2/js/dataTables.min.js"></script>';
                 echo '<script src="https://cdn.datatables.net/buttons/3.0.1/js/dataTables.buttons.min.js"></script>';
