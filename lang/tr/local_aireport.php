@@ -22,4 +22,6 @@ $string['promptname_empty'] = 'Prompt ismi boş olamaz!';
 $string['promptname_help'] = 'Kaydedilen promptun kısa ve anlamlı bir ismi.';
 $string['makefromlistbtn'] = 'Listeden Yap';
 $string['savepromptbtn'] = 'Bu Promptu Kaydet';
-
+$string['updatepromptbtn'] = 'Promptu Güncelle';
+$string['prompt_updated'] = 'Prompt başarıyla güncellendi!';
+$string['prompt_update_error'] = 'Prompt güncellenirken hata oluştu!';

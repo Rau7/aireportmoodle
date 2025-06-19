@@ -44,5 +44,8 @@ $string['error_apikey'] = 'OpenRouter API key is not configured.';
 $string['error_openrouter'] = 'Error communicating with OpenRouter API.';
 $string['makefromlistbtn'] = 'Make from list';
 $string['submitprompt'] = 'Submit';
+$string['updatepromptbtn'] = 'Update Prompt';
+$string['prompt_updated'] = 'Prompt updated successfully!';
+$string['prompt_update_error'] = 'Error updating prompt!';
 
 

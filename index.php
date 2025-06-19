@@ -180,6 +180,27 @@ if (isset($_POST['saveprompt']) && !empty($_POST['prompt']) && !empty($_POST['sq
         $success = get_string('prompt_saved', 'local_aireport');
     }
 }
+// Promptu Güncelle ile geldiyse burada güncelle
+if (isset($_POST['updateprompt']) && !empty($_POST['promptid']) && !empty($_POST['prompt']) && !empty($_POST['sqlresult'])) {
+    global $DB, $USER;
+    $promptname = trim($_POST['promptname'] ?? '');
+    $promptid = intval($_POST['promptid']);
+    if ($promptname === '') {
+        $error = get_string('promptname_empty', 'local_aireport');
+    } else {
+        $record = $DB->get_record('local_aireport_history', array('id' => $promptid, 'userid' => $USER->id));
+        if ($record) {
+            $record->name = $promptname;
+            $record->prompt = $_POST['prompt'];
+            $record->sqlquery = $_POST['sqlresult'];
+            $record->timemodified = time();
+            $DB->update_record('local_aireport_history', $record);
+            $success = get_string('prompt_updated', 'local_aireport');
+        } else {
+            $error = get_string('prompt_update_error', 'local_aireport');
+        }
+    }
+}
 
 // Output page.
 echo $OUTPUT->header();
@@ -205,8 +226,19 @@ if (!empty($sqlresult)) {
     echo html_writer::tag('h3', get_string('resultlabel', 'local_aireport'));
     echo html_writer::tag('pre', $sqlresult, ['class' => 'border p-3 bg-light']);
     // Promptu Kaydet butonu (tablo/sonuç altına)
-    if (!empty($sqlresult) && empty($_POST['saveprompt'])) {
-        // Promptu bul: yeni prompt, post, veya historyden
+    // Eğer geçmişten geldiyse güncelle formu göster
+    if (!empty($sqlresult) && !empty($historyrec->id)) {
+        $promptval = $historyrec->prompt;
+        $nameval = $historyrec->name ?? '';
+        echo '<form method="post" style="margin-top:20px;">';
+        echo '<input type="hidden" name="promptid" value="'.intval($historyrec->id).'">';
+        echo '<input type="hidden" name="prompt" value="'.s($promptval).'">';
+        echo '<input type="hidden" name="sqlresult" value="'.s($sqlresult).'">';
+        echo '<input type="text" name="promptname" value="'.s($nameval).'" placeholder="'.get_string('promptname', 'local_aireport').'" required style="margin-right:10px;">';
+        echo '<button type="submit" name="updateprompt" class="btn btn-success">'.get_string('updatepromptbtn', 'local_aireport').'</button>';
+        echo '</form>';
+    } else if (!empty($sqlresult) && empty($_POST['saveprompt'])) {
+        // Yeni prompt için kaydet formu
         $promptval = '';
         if (!empty($data->prompt)) {
             $promptval = $data->prompt;
