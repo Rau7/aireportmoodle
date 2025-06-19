@@ -53,9 +53,26 @@ foreach ($historyprompts as $h) {
     }
     $historyoptions[$h->id] = $label . ' [' . userdate($h->timecreated, '%d %b %Y %H:%M') . ']';
 }
+// Eğer Go ile geçmişten bir kayıt seçildiyse, prompt ve name değerlerini POST'a inject et
+if (isset($_POST['historygo']) && !empty($_POST['historyprompt'])) {
+    $historyid = intval($_POST['historyprompt']);
+    $historyrec = $DB->get_record('local_aireport_history', array('id' => $historyid, 'userid' => $USER->id));
+    if ($historyrec) {
+        $_POST['prompt'] = $historyrec->prompt;
+        $_POST['promptname'] = $historyrec->name;
+    }
+}
 $mform = new local_aireport\form\prompt_form(null, array('historyoptions' => $historyoptions));
+// Eğer geçmişten bir kayıt seçildiyse prompt ve name alanı otomatik dolsun
+if (!empty($historyrec->prompt)) {
+    $mform->set_data([
+        'prompt' => $historyrec->prompt,
+        'promptname' => $historyrec->name
+    ]);
+}
 $sqlresult = '';
 $error = '';
+
 
 // Process form submission.
 if ($mform->is_cancelled()) {
