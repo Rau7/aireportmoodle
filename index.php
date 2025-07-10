@@ -37,18 +37,7 @@ $PAGE->set_title(get_string('pluginname', 'local_aireport'));
 $PAGE->set_heading(get_string('pluginname', 'local_aireport'));
 $PAGE->set_pagelayout('admin');
 
-// Settings button (only for users who can config site)
-if (has_capability('moodle/site:config', $context)) {
-    $settingsurl = new moodle_url('/admin/settings.php', array('section' => 'local_aireport'));
-    echo html_writer::div(
-        html_writer::link(
-            $settingsurl,
-            '<i class="fa fa-cog"></i> ' . get_string('settings', 'admin'),
-            array('class' => 'btn btn-primary mb-3', 'style' => 'float:right;', 'role' => 'button')
-        ),
-        'd-flex justify-content-end'
-    );
-}
+
 
 // Form include.
 require_once($CFG->dirroot.'/local/aireport/classes/form/prompt_form.php');
@@ -378,6 +367,19 @@ if (!empty($sqlresult)) {
 
 if (!empty($error)) {
     echo $OUTPUT->notification($error, 'notifyproblem');
+}
+
+// Settings button (only for users who can config site) - page bottom
+if (has_capability('moodle/site:config', $context)) {
+    $settingsurl = new moodle_url('/admin/settings.php', array('section' => 'local_aireport_settings'));
+    echo html_writer::div(
+        html_writer::link(
+            $settingsurl,
+            '<i class="fa fa-cog"></i> ' . get_string('settings', 'admin'),
+            array('class' => 'btn btn-primary mt-4', 'role' => 'button')
+        ),
+        'd-flex justify-content-end'
+    );
 }
 
 echo $OUTPUT->footer();

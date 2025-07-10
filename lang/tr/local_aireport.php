@@ -26,4 +26,5 @@ $string['updatepromptbtn'] = 'Promptu Güncelle';
 $string['prompt_updated'] = 'Prompt başarıyla güncellendi!';
 $string['prompt_update_error'] = 'Prompt güncellenirken hata oluştu!';
 $string['aireport'] = 'AI Raporu';
+$string['settings'] = 'Ayarlar';
 
