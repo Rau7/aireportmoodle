@@ -9,8 +9,12 @@
 
 function local_aireport_extend_navigation(global_navigation $navigation) {
     global $CFG;
-
-    if (isloggedin() && !isguestuser()) {
+    $showadminonly = get_config('local_aireport', 'showlink_adminonly');
+    $cansee = true;
+    if ($showadminonly) {
+        $cansee = has_capability('moodle/site:config', \context_system::instance());
+    }
+    if (isloggedin() && !isguestuser() && $cansee) {
         // Add to custom menu items
         if (stripos($CFG->custommenuitems, "/local/aireport/") === false) {
             $nodes = explode("\n", $CFG->custommenuitems);

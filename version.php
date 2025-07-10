@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_aireport';
-$plugin->version   = 2025061901; // YYYYMMDDXX
+$plugin->version   = 2025071001; // YYYYMMDDXX
 $plugin->requires = 2021051700; // Moodle 3.11 ve üzeri
 $plugin->maturity = MATURITY_ALPHA;
 $plugin->release = '0.1.0';

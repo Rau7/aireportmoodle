@@ -12,5 +12,10 @@ function xmldb_local_aireport_upgrade($oldversion) {
         }
         upgrade_plugin_savepoint(true, 2025061901, 'local', 'aireport');
     }
+    if ($oldversion < 2025071001) {
+        // Varsayılan olarak sadece adminler görebilsin (1)
+        set_config('showlink_adminonly', 1, 'local_aireport');
+        upgrade_plugin_savepoint(true, 2025071001, 'local', 'aireport');
+    }
     return true;
 }

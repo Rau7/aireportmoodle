@@ -37,4 +37,12 @@ if ($hassiteconfig) {
         '',
         PARAM_RAW
     ));
+
+    // Add show link to only admins setting
+    $settings->add(new admin_setting_configcheckbox(
+        'local_aireport/showlink_adminonly',
+        get_string('showlink_adminonly', 'local_aireport'),
+        get_string('showlink_adminonly_desc', 'local_aireport'),
+        1 // default checked
+    ));
 }

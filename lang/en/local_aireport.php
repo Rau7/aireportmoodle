@@ -49,5 +49,7 @@ $string['prompt_updated'] = 'Prompt updated successfully!';
 $string['prompt_update_error'] = 'Error updating prompt!';
 $string['aireport'] = 'AI Report';
 $string['settings'] = 'Settings';
+$string['showlink_adminonly'] = "Show link only to managers and admins";
+$string['showlink_adminonly_desc'] = "If enabled, only users with admin/manager roles will see the AI Report link in the navigation.";
 
 

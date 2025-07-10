@@ -27,4 +27,6 @@ $string['prompt_updated'] = 'Prompt başarıyla güncellendi!';
 $string['prompt_update_error'] = 'Prompt güncellenirken hata oluştu!';
 $string['aireport'] = 'AI Raporu';
 $string['settings'] = 'Ayarlar';
+$string['showlink_adminonly'] = "Link'i sadece yöneticiler ve admin görsün";
+$string['showlink_adminonly_desc'] = "Eğer işaretli ise, AI Raporu linki sadece yönetici ve admin yetkisine sahip kullanıcılara görünür.";
 
