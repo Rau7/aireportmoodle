@@ -47,5 +47,7 @@ $string['submitprompt'] = 'Submit';
 $string['updatepromptbtn'] = 'Update Prompt';
 $string['prompt_updated'] = 'Prompt updated successfully!';
 $string['prompt_update_error'] = 'Error updating prompt!';
+$string['aireport'] = 'AI Report';
+
 
 

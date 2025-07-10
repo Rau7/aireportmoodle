@@ -37,6 +37,19 @@ $PAGE->set_title(get_string('pluginname', 'local_aireport'));
 $PAGE->set_heading(get_string('pluginname', 'local_aireport'));
 $PAGE->set_pagelayout('admin');
 
+// Settings button (only for users who can config site)
+if (has_capability('moodle/site:config', $context)) {
+    $settingsurl = new moodle_url('/admin/settings.php', array('section' => 'local_aireport'));
+    echo html_writer::div(
+        html_writer::link(
+            $settingsurl,
+            '<i class="fa fa-cog"></i> ' . get_string('settings', 'admin'),
+            array('class' => 'btn btn-primary mb-3', 'style' => 'float:right;', 'role' => 'button')
+        ),
+        'd-flex justify-content-end'
+    );
+}
+
 // Form include.
 require_once($CFG->dirroot.'/local/aireport/classes/form/prompt_form.php');
 require_once($CFG->libdir.'/tablelib.php');
@@ -199,6 +212,12 @@ if (isset($_POST['saveprompt']) && !empty($_POST['prompt']) && !empty($_POST['sq
 }
 // Promptu Güncelle ile geldiyse burada güncelle
 if (isset($_POST['updateprompt']) && !empty($_POST['promptid']) && !empty($_POST['prompt']) && !empty($_POST['sqlresult'])) {
+    // DEBUG: POST verilerini göster
+    echo '<div style="background:#f8f9fa;border:1px solid #ccc;padding:10px;margin:10px 0;border-radius:5px;">';
+    echo '<strong>DEBUG: updateprompt POST</strong><pre>';
+    print_r($_POST);
+    echo '</pre></div>';
+
     global $DB, $USER;
     $promptname = trim($_POST['promptname'] ?? '');
     $promptid = intval($_POST['promptid']);
@@ -245,7 +264,16 @@ if (!empty($sqlresult)) {
     // Promptu Kaydet butonu (tablo/sonuç altına)
     // Eğer geçmişten geldiyse güncelle formu göster
     if (!empty($sqlresult) && !empty($historyrec->id)) {
-        $promptval = $historyrec->prompt;
+        // Güncel prompt değerini öncelikli olarak POST'tan al
+        if (!empty($_POST['prompt'])) {
+            $promptval = $_POST['prompt'];
+        } else if (!empty($data->prompt)) {
+            $promptval = $data->prompt;
+        } else if (!empty($historyrec->prompt)) {
+            $promptval = $historyrec->prompt;
+        } else {
+            $promptval = '';
+        }
         $nameval = $historyrec->name ?? '';
         echo '<form method="post" style="margin-top:20px;">';
         echo '<input type="hidden" name="promptid" value="'.intval($historyrec->id).'">';
