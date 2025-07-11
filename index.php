@@ -371,7 +371,7 @@ if (!empty($error)) {
 
 // Settings button (only for users who can config site) - page bottom
 if (has_capability('moodle/site:config', $context)) {
-    $settingsurl = new moodle_url('/admin/settings.php', array('section' => 'local_aireport_settings'));
+    $settingsurl = new moodle_url('/local/aireport/settings.php');
     echo html_writer::div(
         html_writer::link(
             $settingsurl,
