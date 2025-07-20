@@ -28,7 +28,25 @@ require_once($CFG->libdir.'/adminlib.php');
 // Require login and check capabilities.
 require_login();
 $context = context_system::instance();
-require_capability('moodle/site:config', $context);
+
+// Sadece admin veya sistemde manager rolü erişebilsin
+$cansee = has_capability('moodle/site:config', $context);
+if (!$cansee) {
+    global $USER, $DB;
+    $managerrole = $DB->get_record('role', array('shortname' => 'manager'));
+    if ($managerrole) {
+        $roles = get_user_roles($context, $USER->id, true);
+        foreach ($roles as $role) {
+            if ($role->roleid == $managerrole->id) {
+                $cansee = true;
+                break;
+            }
+        }
+    }
+}
+if (!$cansee) {
+    throw new required_capability_exception($context, 'moodle/site:config', 'nopermissions', '');
+}
 
 // Setup page.
 $PAGE->set_context($context);
@@ -106,9 +124,9 @@ if ($mform->is_cancelled()) {
     if (!empty($apikey)) {
         // Call OpenRouter API.
         $prompt = $data->prompt;
-        $apiurl = 'https://openrouter.ai/api/v1/chat/completions';
+        $apiurl = 'https://api.openai.com/v1/chat/completions';
         
-        // Prepare system prompt to guide the AI.
+        // systemprompt yapısı değişmeden korunuyor
         $systemprompt  = 'You are a strict SQL generator for Moodle reporting purposes. ';
         $systemprompt .= 'Your task is to: ';
         $systemprompt .= '- Only generate valid, safe MySQL SELECT statements compatible with Moodle\'s database structure. ';
@@ -120,7 +138,7 @@ if ($mform->is_cancelled()) {
         $systemprompt .= '- Return ONLY the raw SQL query with NO markdown formatting, NO code blocks, NO backticks, NO comments, NO explanations. Just the pure SQL query.';
         
         $postdata = [
-            'model' => 'meta-llama/llama-4-maverick:free',
+            'model' => 'gpt-4o',
             'messages' => [
                 ['role' => 'system', 'content' => $systemprompt],
                 ['role' => 'user', 'content' => $prompt]
@@ -371,7 +389,7 @@ if (!empty($error)) {
 
 // Settings button (only for users who can config site) - page bottom
 if (has_capability('moodle/site:config', $context)) {
-    $settingsurl = new moodle_url('/local/aireport/settings.php');
+    $settingsurl = new moodle_url('/admin/settings.php', array('section' => 'local_aireport_settings'));
     echo html_writer::div(
         html_writer::link(
             $settingsurl,
